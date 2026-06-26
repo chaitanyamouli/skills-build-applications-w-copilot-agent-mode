@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchFromApi, extractDataArray } from '../api';
 
+// API Endpoint: https://{VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities
 export default function Activities() {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
