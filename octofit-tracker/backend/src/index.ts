@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import { connectToDatabase } from './database'
 import usersRouter from './routes/users'
 import teamsRouter from './routes/teams'
 import activitiesRouter from './routes/activities'
@@ -12,14 +13,15 @@ dotenv.config()
 const app = express()
 app.use(express.json())
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit'
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit_db'
 const PORT = Number(process.env.PORT) || 8000
 
 const CODESPACE_NAME = process.env.CODESPACE_NAME
-const API_URL = process.env.API_URL || (CODESPACE_NAME ? `https://${CODESPACE_NAME}-8000.githubpreview.dev` : `http://localhost:${PORT}`)
+// Use Codespaces preview domain when running in Codespaces; otherwise fallback to localhost
+const API_URL = process.env.API_URL || (CODESPACE_NAME ? `https://${CODESPACE_NAME}-8000.app.github.dev` : `http://localhost:${PORT}`)
 app.locals.apiUrl = API_URL
 
-mongoose.connect(MONGODB_URI).then(() => {
+connectToDatabase().then(() => {
   console.log('Connected to MongoDB')
 }).catch(err => {
   console.error('MongoDB connection error:', err)
